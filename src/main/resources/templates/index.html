@@ -7,6 +7,10 @@
 <body>
 <h1>Data Duplicate Scanner</h1>
 
-<p>Application is running.</p>
+<p>Available databases:</p>
+
+<ul>
+    <li th:each="database : ${databases}" th:text="${database}"></li>
+</ul>
 </body>
 </html>
