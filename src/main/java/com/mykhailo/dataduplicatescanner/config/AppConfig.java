@@ -28,6 +28,18 @@ public class AppConfig {
         return properties.getProperty("app.column.target");
     }
 
+    public static String getLinkTable() {
+        return properties.getProperty("app.table.link");
+    }
+
+    public static String getLinkTargetIdColumn() {
+        return properties.getProperty("app.column.link-target-id");
+    }
+
+    public static String getMainIdColumn() {
+        return properties.getProperty("app.column.main-id");
+    }
+
     public static String getHost() {
         return properties.getProperty("app.db.host");
     }

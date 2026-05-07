@@ -23,13 +23,17 @@
     <thead>
     <tr>
         <th>Email</th>
-        <th>Duplicate count</th>
+        <th>IDs count</th>
+        <th>Used IDs count</th>
+        <th>Linked rows count</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="record : ${duplicateRecords}">
-        <td th:text="${record.value}"></td>
-        <td th:text="${record.count}"></td>
+        <td th:text="${record.email}"></td>
+        <td th:text="${record.idsCount}"></td>
+        <td th:text="${record.usedIdsCount}"></td>
+        <td th:text="${record.linkedRowsCount}"></td>
     </tr>
     </tbody>
 </table>
@@ -37,6 +41,25 @@
 <p th:if="${#lists.isEmpty(duplicateRecords)}">
     No duplicates found.
 </p>
+
+<h3>Column description</h3>
+
+<ul>
+    <li>
+        <strong>IDs count</strong> —
+        how many rows with the same email exist in the main table.
+    </li>
+
+    <li>
+        <strong>Used IDs count</strong> —
+        how many of those IDs are actually used in linked records.
+    </li>
+
+    <li>
+        <strong>Linked rows count</strong> —
+        total number of linked rows connected to those IDs.
+    </li>
+</ul>
 
 </body>
 </html>

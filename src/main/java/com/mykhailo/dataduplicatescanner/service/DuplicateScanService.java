@@ -4,11 +4,7 @@ import com.mykhailo.dataduplicatescanner.config.AppConfig;
 import com.mykhailo.dataduplicatescanner.model.DuplicateRecord;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +17,28 @@ public class DuplicateScanService {
         String url = "jdbc:mysql://" + AppConfig.getHost() + ":" + AppConfig.getPort() + "/" + databaseName;
 
         String sql = """
-        SELECT %s, COUNT(*) AS duplicate_count
-        FROM %s
-        GROUP BY %s
-        HAVING COUNT(*) > 1
-        ORDER BY duplicate_count DESC
-        """.formatted(
+                SELECT
+                    main.%s AS email,
+                    COUNT(DISTINCT main.%s) AS ids_count,
+                    COUNT(DISTINCT link.%s) AS used_ids_count,
+                    COUNT(link.%s) AS linked_rows_count
+                FROM %s main
+                LEFT JOIN %s link
+                    ON link.%s = main.%s
+                GROUP BY main.%s
+                HAVING COUNT(DISTINCT main.%s) > 1
+                ORDER BY linked_rows_count DESC, ids_count DESC
+                """.formatted(
                 AppConfig.getTargetColumn(),
+                AppConfig.getMainIdColumn(),
+                AppConfig.getLinkTargetIdColumn(),
+                AppConfig.getLinkTargetIdColumn(),
                 AppConfig.getTargetTable(),
-                AppConfig.getTargetColumn()
+                AppConfig.getLinkTable(),
+                AppConfig.getLinkTargetIdColumn(),
+                AppConfig.getMainIdColumn(),
+                AppConfig.getTargetColumn(),
+                AppConfig.getMainIdColumn()
         );
 
         try (
@@ -44,7 +53,9 @@ public class DuplicateScanService {
             while (resultSet.next()) {
                 records.add(new DuplicateRecord(
                         resultSet.getString("email"),
-                        resultSet.getInt("duplicate_count")
+                        resultSet.getInt("ids_count"),
+                        resultSet.getInt("used_ids_count"),
+                        resultSet.getInt("linked_rows_count")
                 ));
             }
         } catch (SQLException exception) {
