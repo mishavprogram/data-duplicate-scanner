@@ -20,6 +20,14 @@ public class AppConfig {
         }
     }
 
+    public static String getTargetTable() {
+        return properties.getProperty("app.table.target");
+    }
+
+    public static String getTargetColumn() {
+        return properties.getProperty("app.column.target");
+    }
+
     public static String getHost() {
         return properties.getProperty("app.db.host");
     }

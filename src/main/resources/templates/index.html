@@ -5,12 +5,18 @@
     <title>Data Duplicate Scanner</title>
 </head>
 <body>
+
 <h1>Data Duplicate Scanner</h1>
 
 <p>Available databases:</p>
 
 <ul>
-    <li th:each="database : ${databases}" th:text="${database}"></li>
+    <li th:each="database : ${databases}">
+        <a th:href="@{/scan(database=${database})}"
+           th:text="${database}">
+        </a>
+    </li>
 </ul>
+
 </body>
 </html>

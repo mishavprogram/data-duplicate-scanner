@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan result</title>
+</head>
+<body>
+<h1>Scan result</h1>
+
+<p>
+    Database:
+    <strong th:text="${database}"></strong>
+</p>
+
+<p>
+    <a href="/">Back to database list</a>
+</p>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>Email</th>
+        <th>Duplicate count</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="record : ${duplicateRecords}">
+        <td th:text="${record.value}"></td>
+        <td th:text="${record.count}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.isEmpty(duplicateRecords)}">
+    No duplicates found.
+</p>
+
+</body>
+</html>
