@@ -47,6 +47,7 @@ public class HomeController {
                         database,
                         duplicateScanService.countDuplicatedValues(database)
                 ))
+                .filter(summary -> summary.getDuplicatedValuesCount() > 0)
                 .sorted((first, second) ->
                         Integer.compare(second.getDuplicatedValuesCount(), first.getDuplicatedValuesCount()))
                 .toList();
