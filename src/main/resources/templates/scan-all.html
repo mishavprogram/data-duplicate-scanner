@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All database scan result</title>
+</head>
+<body>
+
+<h1>All database scan result</h1>
+
+<p>
+    <a href="/">Back to database list</a>
+</p>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>Database</th>
+        <th>Duplicated values count</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="summary : ${summaries}">
+        <td>
+            <a th:href="@{/scan(database=${summary.databaseName})}"
+               th:text="${summary.databaseName}">
+            </a>
+        </td>
+        <!--
+        Show duplicate count for successfully scanned databases.
+
+        If scan failed:
+        - missing table
+        - missing column
+        - access issue
+        - incompatible schema
+
+        then show N/A instead of crashing the whole page.
+        -->
+        <td>
+
+    <span th:if="${summary.duplicatedValuesCount >= 0}"
+          th:text="${summary.duplicatedValuesCount}">
+    </span>
+
+            <span th:if="${summary.duplicatedValuesCount < 0}">
+        N/A
+    </span>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

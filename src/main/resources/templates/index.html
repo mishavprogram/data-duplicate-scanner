@@ -10,6 +10,10 @@
 
 <p>Available databases:</p>
 
+<p>
+    <a href="/scan-all">Scan all databases</a>
+</p>
+
 <ul>
     <li th:each="database : ${databases}">
         <a th:href="@{/scan(database=${database})}"

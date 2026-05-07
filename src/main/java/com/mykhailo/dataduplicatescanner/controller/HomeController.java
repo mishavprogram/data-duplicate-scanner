@@ -1,5 +1,6 @@
 package com.mykhailo.dataduplicatescanner.controller;
 
+import com.mykhailo.dataduplicatescanner.model.DatabaseScanSummary;
 import com.mykhailo.dataduplicatescanner.model.DuplicateRecord;
 import com.mykhailo.dataduplicatescanner.service.DatabaseService;
 import com.mykhailo.dataduplicatescanner.service.DuplicateScanService;
@@ -36,5 +37,22 @@ public class HomeController {
         model.addAttribute("duplicateRecords", duplicateRecords);
 
         return "scan";
+    }
+
+    @GetMapping("/scan-all")
+    public String scanAll(Model model) {
+        List<DatabaseScanSummary> summaries = databaseService.findDatabases()
+                .stream()
+                .map(database -> new DatabaseScanSummary(
+                        database,
+                        duplicateScanService.countDuplicatedValues(database)
+                ))
+                .sorted((first, second) ->
+                        Integer.compare(second.getDuplicatedValuesCount(), first.getDuplicatedValuesCount()))
+                .toList();
+
+        model.addAttribute("summaries", summaries);
+
+        return "scan-all";
     }
 }

@@ -53,4 +53,25 @@ public class DuplicateScanService {
 
         return records;
     }
+
+    /*
+    Some databases do not contain the target table.
+    For example:
+    - admin databases
+    - technical databases
+    - special service schemas
+
+    We do not want the whole scan to crash because of one incompatible database.
+
+    Return:
+    - duplicate count if scan succeeds
+    - -1 if database cannot be scanned
+    */
+    public int countDuplicatedValues(String databaseName) {
+        try {
+            return scanDatabase(databaseName).size();
+        } catch (Exception exception) {
+            return -1;
+        }
+    }
 }
